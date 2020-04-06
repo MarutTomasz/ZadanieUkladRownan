@@ -1,7 +1,7 @@
 #ifndef WEKTOR
 #define WEKTOR
 
-#define ROZMIAR 3
+#include "rozmiar.h"
 #include <math.h>
 
 #include <iostream>

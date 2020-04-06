@@ -1,6 +1,7 @@
 #ifndef MACIERZKW
 #define MACIERZKW
 
+#include "rozmiar.h"
 #include "Wektor.hh"
 
 enum Wyz_Metoda {Sarrus, Laplace, Gauss};

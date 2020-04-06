@@ -3,7 +3,7 @@
 
 #include "Wektor.hh"
 #include "MacierzKw.hh"
-
+#include "rozmiar.h"
 
 class UkladRownanL{
   MacierzKw A; // Ax = b

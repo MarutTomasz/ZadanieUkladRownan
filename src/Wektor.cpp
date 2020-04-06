@@ -1,6 +1,8 @@
 #include "Wektor.hh"
 
 /********** SET I GET **********/
+// Funkcja pozwala na odnoszenie się do wybranego elementu
+// i pozawala na modyfikowanie go.
 double & Wektor::operator [] (int index) {
   if (index < 0 || index >= ROZMIAR) {
     cerr << "Poza zakresem" << endl;
@@ -9,6 +11,8 @@ double & Wektor::operator [] (int index) {
   return tab[index];
 }
 
+// Funkca pozwala na odnoszenie się do wybranego elementu,
+// ale nie pozwala na modyfikowanie go.
 const double & Wektor::operator [] (int index) const {
   if (index < 0 || index >= ROZMIAR) {
     cerr << "Poza zakresem" << endl;
@@ -35,12 +39,14 @@ Wektor::Wektor (double *tablica) {
 }
 
 /********** WCZYTYWANIE I WYSWIETLANIE  **********/
+// operator pozwalajacy wyswietlac wektor
 std::ostream & operator << (std::ostream &strm, const Wektor &W) {
   for (int i=0; i<ROZMIAR; i++)
     cout << W[i] << "  ";
   return strm;
 }
 
+// operator pozwalajacy wczytywac wektor
 std::istream & operator >> (std::istream &strm, Wektor &W) {
   for (int i=0; i<ROZMIAR; i++)
     cin >> W[i];
@@ -48,6 +54,7 @@ std::istream & operator >> (std::istream &strm, Wektor &W) {
 }
 
 /********** OPERACJE MATEMATYCZNE  **********/
+// operator pozwalajacy na dodawanie wektorow
 const Wektor Wektor::operator + (const Wektor &W2) const {
   Wektor W3;
   for (int i=0; i<ROZMIAR; i++)
@@ -55,13 +62,15 @@ const Wektor Wektor::operator + (const Wektor &W2) const {
   return W3;
 } 
 
+// Operator pozwalajacy na odejmowanie wektorow
 const Wektor Wektor::operator - (const Wektor &W2) const {
   Wektor W3;
   for (int i=0; i<ROZMIAR; i++)
     W3[i] = tab[i] - W2[i];
   return W3;
 } 
-    
+
+// Operator pozwalajacy na mnozenie skalarne wektorow
 const double Wektor::operator * (const Wektor &W2) const {
   double wynik = 0;
   for (int i=0; i<ROZMIAR; i++)
@@ -69,6 +78,7 @@ const double Wektor::operator * (const Wektor &W2) const {
   return wynik;
 }
 
+// Operator pozwalajacy na mnozenie wektora przez liczbe
 const Wektor Wektor::operator * (double l2) const{
   Wektor Wynik;
   for (int i=0; i<ROZMIAR; i++)
@@ -76,6 +86,7 @@ const Wektor Wektor::operator * (double l2) const{
   return Wynik;
 }
 
+// Tak jak wyzej, ale argumenty na odwrot
 Wektor operator * (double l1,const Wektor &W2) {
   Wektor Wynik;
   for (int i=0; i<ROZMIAR; i++)
@@ -83,6 +94,7 @@ Wektor operator * (double l1,const Wektor &W2) {
   return Wynik;
 } 
 
+// Operator pozwalajacy na dzielenie wektora przez liczbe
 const Wektor Wektor::operator / (double l2) const{
   Wektor Wynik;
   for (int i=0; i<ROZMIAR; i++)
@@ -91,6 +103,7 @@ const Wektor Wektor::operator / (double l2) const{
 }
 
 /********** OPERACJE POROWNIANIA  **********/
+// Operatory porownania wektorow
 bool Wektor::operator == (const Wektor &W2) const {
   for (int i=0; i<ROZMIAR; i++)
     if (tab[i] != W2[i])
@@ -105,6 +118,7 @@ bool Wektor::operator != (const Wektor &W2) const {
 }
 
 /********** OPERACJE WEKTOROWE  **********/
+// Metoda zwracajaca dlugosc wektora
 double Wektor::dlugosc() const{
   double l = 0;
   for (int i=0; i<ROZMIAR; i++)

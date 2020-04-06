@@ -1,6 +1,8 @@
 #include "MacierzKw.hh"
 
 /********** SET I GET  **********/
+// Operator pozwalajacy na odwolywanie sie do wybranego wiersza
+// macierzy i jego zastepowanie
 Wektor & MacierzKw::operator[] (int index) {
   if (index < 0 || index >= ROZMIAR) {
     cerr << "Poza zakresem" << endl;
@@ -9,6 +11,8 @@ Wektor & MacierzKw::operator[] (int index) {
   return tab[index];
 }
 
+// Operator pozwalajacy na odwolywanie sie do wybranego wiersza
+// macierzy, ale bez mozliwosc zastapienia
 const Wektor  & MacierzKw::operator[] (int index) const {
   if (index < 0 || index >= ROZMIAR) {
     cerr << "Poza zakresem" << endl;
@@ -31,12 +35,14 @@ MacierzKw::MacierzKw(Wektor A, Wektor B, Wektor C) {
 }
 
 /********** WCZYTYWANIE I WYSWIETLANIE **********/
+// Operator wyswietlajacy cala macierz
 std::ostream & operator << (std::ostream &strm, const MacierzKw &A) {
   for (int i=0; i < ROZMIAR; i++)
     cout << A[i] << endl;
   return strm;
 }
 
+// Operator wczytujacy cala macierz
 std::istream & operator >> (std::istream &strm, MacierzKw &A) {
   for (int i=0; i < ROZMIAR; i++)
     cin >> A[i];
@@ -44,13 +50,15 @@ std::istream & operator >> (std::istream &strm, MacierzKw &A) {
 }
 
 /********** OPERACJE MATEMATYCZNE **********/
+// Operacja dodawania macierzy
 const MacierzKw MacierzKw::operator + (const MacierzKw &B) const {
   MacierzKw Wynik;
   for (int i=0; i < ROZMIAR; i++)
     Wynik [i] = tab[i] + B[i];
   return Wynik;
 }
-  
+
+// Operacja odejmowania macierzy
 const MacierzKw MacierzKw::operator - (const MacierzKw &B) const {
   MacierzKw Wynik;
   for (int i=0; i < ROZMIAR; i++)
@@ -58,6 +66,7 @@ const MacierzKw MacierzKw::operator - (const MacierzKw &B) const {
   return Wynik;
 }
 
+// Operacja mnozenia dwoch macierzy kwadratowych
 const MacierzKw MacierzKw::operator *(const MacierzKw &B) const {
   MacierzKw Wynik;
   MacierzKw Trans_B = B.transponuj();
@@ -67,6 +76,7 @@ const MacierzKw MacierzKw::operator *(const MacierzKw &B) const {
   return Wynik;
 }
 
+// Operacja mnozenia macierzy przzez skalar
 const MacierzKw MacierzKw::operator *(double B) const {
   MacierzKw Wynik;
   for (int i=0; i < ROZMIAR; i++)
@@ -74,6 +84,7 @@ const MacierzKw MacierzKw::operator *(double B) const {
   return Wynik;
 }
 
+// Operacja mnozenia macierzy przez wektor
 const Wektor MacierzKw::operator *(const Wektor &B) const {
   Wektor Wynik;
   for (int i=0; i < ROZMIAR; i++)
@@ -81,6 +92,7 @@ const Wektor MacierzKw::operator *(const Wektor &B) const {
   return Wynik;
 }
 
+// Operacja mnozenia skalar razy wektor
 const MacierzKw operator *(double B, const MacierzKw &M) {
   MacierzKw Wynik;
   for (int i=0; i < ROZMIAR; i++)
@@ -89,6 +101,7 @@ const MacierzKw operator *(double B, const MacierzKw &M) {
 }
 
 /********** OPERACJE POROWNANIA  **********/
+// operacja porownania macierzy
 bool MacierzKw::operator == (const MacierzKw &W2) const {
   for (int i=0; i < ROZMIAR; i++)
     if(tab[i] != W2[i])
@@ -103,6 +116,7 @@ bool MacierzKw::operator != (const MacierzKw &W2) const {
 }
 
 /********** METODY MACIERZOWE **********/
+// Zamiana miejscami dwoch wybranych wierszy macierzy
 void MacierzKw::przestaw_wiersze(int index1, int index2) {
   if (index1 < 0 || index1 >= ROZMIAR) {
     cerr << "Poza zakresem" << endl;
@@ -117,6 +131,7 @@ void MacierzKw::przestaw_wiersze(int index1, int index2) {
   tab[index2] = pomocniczy;
 }
 
+// Zamiana miejscami dwoch wybranych kolumn macierzy
 void MacierzKw::przestaw_kolumny(int index1, int index2) {
   MacierzKw pomocnicza;
   pomocnicza = this->transponuj();
@@ -124,6 +139,7 @@ void MacierzKw::przestaw_kolumny(int index1, int index2) {
   *this = pomocnicza.transponuj();
 }
 
+// Metoda pozwalajaca na transponowanie macierzy
 const MacierzKw MacierzKw::transponuj() const {
   MacierzKw Transponowana;
   for (int i=0; i < ROZMIAR; i++)
@@ -132,6 +148,7 @@ const MacierzKw MacierzKw::transponuj() const {
   return Transponowana;
 }
 
+// Metoda pozwalajaca na oblicznie wyznacznikow roznymi metodami
 double MacierzKw::wyznacznik(Wyz_Metoda metoda) const {
   double wyznacznik;
   MacierzKw P = *this;
@@ -171,7 +188,7 @@ double MacierzKw::wyznacznik(Wyz_Metoda metoda) const {
   
 }
  
-
+// Funkcja pozwalajaca na utworzenie macierzy jednostkowej
 MacierzKw MacierzJednostkowa() {
   MacierzKw M;
   for (int i=0; i < ROZMIAR; i++)

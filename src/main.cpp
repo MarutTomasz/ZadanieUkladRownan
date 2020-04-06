@@ -1,6 +1,7 @@
 #include "Wektor.hh"
 #include "MacierzKw.hh"
 #include "UkladRownanL.hh"
+#include "rozmiar.h"
 
 int main() {
   double wyznacznik = 0;
