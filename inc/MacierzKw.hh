@@ -11,52 +11,49 @@ enum Odw_Metoda {Gaus_Jordan, Definicja};
 
 class MacierzKw {
   Wektor tab[ROZMIAR];
-      //MacierzKw dopelnienie(int x, int y);  - tylko jesli znamy juz szablony
-
+  void przestaw_kolumny(int index1, int index2);
+  double wyznacznik2_2(int index1, int index2) const; // prowizorka dla 3x3
+  MacierzKw macierz_dopelnien () const;  // prowizorka dla 3x3
+  
 public:
   // Metody sluzace jako set i get
   Wektor & operator[] (int index);
-  const Wektor  & operator[] (int index) const;
+  const Wektor & operator[] (int index) const;
 
   // Konstruktory  
   MacierzKw();
   MacierzKw(Wektor A, Wektor B, Wektor C);
-  // MacierzKw(double *tablica);
-  // MacierzKw(double a1, double a2, double a3, double a4, double a5, double a6, double a7, double a8, double a9);
   
   // Operacje matematyczne
-  const MacierzKw operator +(const MacierzKw &B) const; //1
-  const MacierzKw operator -(const MacierzKw &B) const; //1
-  const MacierzKw operator *(const MacierzKw &B) const; //1
-  const MacierzKw operator *(double B) const; //1
-  const Wektor operator *(const Wektor &B) const;
+  MacierzKw operator +(const MacierzKw &M) const; //1
+  MacierzKw operator -(const MacierzKw &M) const; //1
+  MacierzKw operator *(const MacierzKw &M) const; //1
+  MacierzKw operator *(double liczba) const; //1
+  Wektor operator *(const Wektor &W) const;
   
   // Operacje porownania
-  bool operator == (const MacierzKw &W2) const;
-  bool operator != (const MacierzKw &W2) const;
+  bool operator == (const MacierzKw &M) const;
+  bool operator != (const MacierzKw &M) const;
 
   // Metody macierzowe
-  const MacierzKw transponuj() const;
-  //void transponuj();
-
-  const MacierzKw odwroc() const;
-  //void odwroc(); //z definicji, gauss
-
-  double wyznacznik(Wyz_Metoda metoda) const; //laplace, gauss, sarrusa
-
   void przestaw_wiersze(int index1, int index2);
-  void przestaw_kolumny(int index1, int index2);
+  double wyznacznik(Wyz_Metoda metoda) const; //laplace, gauss, sarrusa
+  const MacierzKw transponuj() const;
+  const MacierzKw odwroc() const; //z definicji, gauss
+  //void zmien_wiersz(int index, const Wektor W);
+  //void zmien_kolumne(int index, const Wektor W);
+  //Wektor zwroc_wiersz(int index);
+  //Wektor zwroc_kolumne(int index);
+  
 };
 // Wyswietlanie i wczytywanie
-std::istream & operator >> (std::istream &strm, MacierzKw &A);
-std::ostream & operator << (std::ostream &strm, const MacierzKw &A);
+std::istream & operator >> (std::istream &strm, MacierzKw &M);
+std::ostream & operator << (std::ostream &strm, const MacierzKw &M);
 
 // Operacja matematyczna
-const MacierzKw operator *(double B, const MacierzKw &M);
+MacierzKw operator *(double liczba, const MacierzKw &M);
 
 // Funkjca macierzowa
 MacierzKw MacierzJednostkowa();
-
-
 
 #endif

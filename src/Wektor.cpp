@@ -1,8 +1,20 @@
 #include "Wektor.hh"
 
 /********** SET I GET **********/
-// Funkcja pozwala na odnoszenie się do wybranego elementu
-// i pozawala na modyfikowanie go.
+/* Metody pozwalajace na odwolywanie sie do elementow wektora
+ * poprzez uzycie nawiasow klamrowych.
+ *
+ * index - pozycja elementu w tablicy;
+ *
+ * Warunek wstepny:
+ *   index - liczba calkowita z przedzialu [0,ROZMIAR);
+ *
+ * Warunek koncowy:
+ *   brak;
+ *
+ * Zwracane wartosci:
+ *   Wartosc elementu tab[index];
+ */
 double & Wektor::operator [] (int index) {
   if (index < 0 || index >= ROZMIAR) {
     cerr << "Poza zakresem" << endl;
@@ -11,8 +23,6 @@ double & Wektor::operator [] (int index) {
   return tab[index];
 }
 
-// Funkca pozwala na odnoszenie się do wybranego elementu,
-// ale nie pozwala na modyfikowanie go.
 const double & Wektor::operator [] (int index) const {
   if (index < 0 || index >= ROZMIAR) {
     cerr << "Poza zakresem" << endl;
@@ -39,95 +49,152 @@ Wektor::Wektor (double *tablica) {
 }
 
 /********** WCZYTYWANIE I WYSWIETLANIE  **********/
-// operator pozwalajacy wyswietlac wektor
-std::ostream & operator << (std::ostream &strm, const Wektor &W) {
-  for (int i=0; i<ROZMIAR; i++)
-    cout << W[i] << "  ";
-  return strm;
-}
-
-// operator pozwalajacy wczytywac wektor
+/* Funkcja pozwalajaca na wczytywanie wartosci ze strumienia do wektora.
+ *
+ * strm - strumien z ktorego czytamy dane
+ * W - wektor na ktory zapisujemy dane
+ *
+ * Warunek wstepny:
+ *   strm - zainicjowany strumien wejsciowy;
+ *
+ * Warunek koncowy:
+ *   Strumien strm nie zostal zepsuty;
+ *
+ * Zwracane wartosci:
+ *   Wskaznik na strumien strm;
+ */
 std::istream & operator >> (std::istream &strm, Wektor &W) {
   for (int i=0; i<ROZMIAR; i++)
     cin >> W[i];
   return strm;
 }
 
+/* Funkcja pozwalajaca na wypisywanie wartosci wektora na strumien.
+ *
+ * strm - strumien na ktory wrzucamy dane
+ * W - wektor z ktorego czytamy dane
+ *
+ * Warunek wstepny:
+ *   strm - zainicjowany strumien wyjsciowy;
+ *
+ * Warunek koncowy:
+ *   Nastapilo wyswietlenie komunikatu;
+ *
+ * Zwracane wartosci:
+ *   Wskaznik na strumien strm;
+ */
+std::ostream & operator << (std::ostream &strm, const Wektor &W) {
+  for (int i=0; i<ROZMIAR; i++)
+    cout << W[i] << "  ";
+  return strm;
+}
+
 /********** OPERACJE MATEMATYCZNE  **********/
-// operator pozwalajacy na dodawanie wektorow
-const Wektor Wektor::operator + (const Wektor &W2) const {
-  Wektor W3;
+/* Metody i funkcje przeciazajace operatory dzialan matematycznych.
+ *
+ * W - zawiera jeden z argeumentow operacji artmentycznej w 
+ *                     postaci wektora;
+ * liczba - zawiera jeden z argumentow operacji artmetycznej w 
+ *                     postaci liczby skalarnej;
+ *
+ * Warunek wstepny:
+ *   W przypadku operacji dzielenia, zmienna liczba musi byc 
+ *                     rozna od 0;   
+ *
+ * Warunek koncowy:
+ *   brak;
+ *
+ * Zwracane wartosci:
+ *   Wynik operacji artmentycznej;
+ */
+Wektor Wektor::operator + (const Wektor &W) const {
+  Wektor wynik;
   for (int i=0; i<ROZMIAR; i++)
-    W3[i] = tab[i] + W2[i];
-  return W3;
+    wynik[i] = tab[i] + W[i];
+  return wynik;
 } 
 
-// Operator pozwalajacy na odejmowanie wektorow
-const Wektor Wektor::operator - (const Wektor &W2) const {
-  Wektor W3;
+Wektor Wektor::operator - (const Wektor &W) const {
+  Wektor wynik;
   for (int i=0; i<ROZMIAR; i++)
-    W3[i] = tab[i] - W2[i];
-  return W3;
+    wynik[i] = tab[i] - W[i];
+  return wynik;
 } 
 
-// Operator pozwalajacy na mnozenie skalarne wektorow
-const double Wektor::operator * (const Wektor &W2) const {
+double Wektor::operator * (const Wektor &W) const {
   double wynik = 0;
   for (int i=0; i<ROZMIAR; i++)
-    wynik += tab[i] * W2[i];
+    wynik += tab[i] * W[i];
   return wynik;
 }
 
-// Operator pozwalajacy na mnozenie wektora przez liczbe
-const Wektor Wektor::operator * (double l2) const{
-  Wektor Wynik;
+Wektor Wektor::operator * (double liczba) const{
+  Wektor wynik;
   for (int i=0; i<ROZMIAR; i++)
-    Wynik[i] = tab[i] * l2;
-  return Wynik;
+    wynik[i] = tab[i] * liczba;
+  return wynik;
 }
 
-// Tak jak wyzej, ale argumenty na odwrot
-Wektor operator * (double l1,const Wektor &W2) {
-  Wektor Wynik;
+Wektor Wektor::operator / (double liczba) const{
+  Wektor wynik;
+  if(liczba == 0)
+    exit(1);
   for (int i=0; i<ROZMIAR; i++)
-    Wynik[i] = W2[i] * l1;
-  return Wynik;
+    wynik[i] = tab[i] / liczba;
+  return wynik;
+}
+
+Wektor operator * (double liczba, const Wektor &W) {
+  Wektor wynik;
+  for (int i=0; i<ROZMIAR; i++)
+    wynik[i] = W[i] * liczba;
+  return wynik;
 } 
 
-// Operator pozwalajacy na dzielenie wektora przez liczbe
-const Wektor Wektor::operator / (double l2) const{
-  Wektor Wynik;
-  for (int i=0; i<ROZMIAR; i++)
-    Wynik[i] = tab[i] / l2;
-  return Wynik;
-}
-
 /********** OPERACJE POROWNIANIA  **********/
-// Operatory porownania wektorow
-bool Wektor::operator == (const Wektor &W2) const {
+/* Metody pozwalajace na porownywanie dwoch wektorow.
+ *
+ * W - jeden z argumentow operacji porownania
+ *
+ * Warunek wstepny:
+ *   Zgodne typy argumentow;   
+ *
+ * Warunek koncowy:
+ *   brak;
+ *
+ * Zwracane wartosci:
+ *   False lub true, wynik operacji porownania;
+ */
+bool Wektor::operator == (const Wektor &W) const {
+  double epsilon = 0.000001;
   for (int i=0; i<ROZMIAR; i++)
-    if (tab[i] != W2[i])
+    if (abs(tab[i]- W[i]) > epsilon)
       return false;
   return true;
 }
 
-bool Wektor::operator != (const Wektor &W2) const {
-  if (*this == W2)
+bool Wektor::operator != (const Wektor &W) const {
+  if (*this == W)
     return false;
   return true;
 }
 
 /********** OPERACJE WEKTOROWE  **********/
-// Metoda zwracajaca dlugosc wektora
+/* Metoda zwracajaca dlugosc wektora.
+ *
+ * Warunek wstepny:
+ *   brak;
+ *
+ * Warunek koncowy:
+ *   brak;
+ *
+ * Zwracane wartosci:
+ *   Wartosc oznaczajaca dlugosc wektora;
+ */
 double Wektor::dlugosc() const{
-  double l = 0;
+  double length = 0;
   for (int i=0; i<ROZMIAR; i++)
-    l = l + (tab[i] * tab[i]);
-  l = sqrt(l);
-  return l;
+    length += (tab[i] * tab[i]);
+  length = sqrt(length);
+  return length;
 }
-
-
-
-
-  

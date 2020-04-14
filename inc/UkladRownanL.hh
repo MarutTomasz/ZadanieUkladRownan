@@ -9,11 +9,17 @@ class UkladRownanL{
   MacierzKw A; // Ax = b
   Wektor b;
 public:
-  const Wektor & rozwiaz();
   UkladRownanL();
   UkladRownanL(const MacierzKw & M, const Wektor & W);
-  const Wektor & zwroc_wektor_wolny();
-  void zmien_wektor_wolny(const Wektor & W);
+  
+  const MacierzKw & get_A() const;
+  const Wektor & get_b() const;
+   
+  void set_A(const MacierzKw &N);
+  void set_b(const Wektor &N);
+  
+  const Wektor & rozwiaz();
+  
   //analoginczie dla macierzy
 };
 

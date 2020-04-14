@@ -1,8 +1,20 @@
 #include "MacierzKw.hh"
 
 /********** SET I GET  **********/
-// Operator pozwalajacy na odwolywanie sie do wybranego wiersza
-// macierzy i jego zastepowanie
+/* Metody pozwalajace na odwolywanie sie do elementow macierzy
+ * poprzez uzycie nawiasow klamrowych.
+ *
+ * index - pozycja elementu w tablicy;
+ *
+ * Warunek wstepny:
+ *   index - liczba calkowita z przedzialu [0,ROZMIAR);
+ *
+ * Warunek koncowy:
+ *   brak;
+ *
+ * Zwracane wartosci:
+ *   Wartosc elementu tab[index];
+ */
 Wektor & MacierzKw::operator[] (int index) {
   if (index < 0 || index >= ROZMIAR) {
     cerr << "Poza zakresem" << endl;
@@ -11,8 +23,6 @@ Wektor & MacierzKw::operator[] (int index) {
   return tab[index];
 }
 
-// Operator pozwalajacy na odwolywanie sie do wybranego wiersza
-// macierzy, ale bez mozliwosc zastapienia
 const Wektor  & MacierzKw::operator[] (int index) const {
   if (index < 0 || index >= ROZMIAR) {
     cerr << "Poza zakresem" << endl;
@@ -35,82 +45,134 @@ MacierzKw::MacierzKw(Wektor A, Wektor B, Wektor C) {
 }
 
 /********** WCZYTYWANIE I WYSWIETLANIE **********/
-// Operator wyswietlajacy cala macierz
-std::ostream & operator << (std::ostream &strm, const MacierzKw &A) {
+/* Funkcja pozwalajaca na wczytywanie wartosci ze strumienia do macierzy.
+ *
+ * strm - strumien z ktorego czytamy dane
+ * M - macierz na ktora zapisujemy dane
+ *
+ * Warunek wstepny:
+ *   strm - zainicjowany strumien wejsciowy;
+ *
+ * Warunek koncowy:
+ *   Strumien strm nie zostal zepsuty;
+ *
+ * Zwracane wartosci:
+ *   Wskaznik na strumien strm;
+ */
+std::istream & operator >> (std::istream &strm, MacierzKw &M) {
   for (int i=0; i < ROZMIAR; i++)
-    cout << A[i] << endl;
+    cin >> M[i];
   return strm;
 }
 
-// Operator wczytujacy cala macierz
-std::istream & operator >> (std::istream &strm, MacierzKw &A) {
+/* Funkcja pozwalajaca na wypisywanie wartosci macierzy na strumien.
+ *
+ * strm - strumien na ktory wrzucamy dane
+ * M - macierz z ktorej czytamy dane
+ *
+ * Warunek wstepny:
+ *   strm - zainicjowany strumien wyjsciowy;
+ *
+ * Warunek koncowy:
+ *   Nastapilo wyswietlenie komunikatu;
+ *
+ * Zwracane wartosci:
+ *   Wskaznik na strumien strm;
+ */
+std::ostream & operator << (std::ostream &strm, const MacierzKw &M) {
   for (int i=0; i < ROZMIAR; i++)
-    cin >> A[i];
+    cout << M[i] << endl;
   return strm;
 }
 
 /********** OPERACJE MATEMATYCZNE **********/
-// Operacja dodawania macierzy
-const MacierzKw MacierzKw::operator + (const MacierzKw &B) const {
+/* Metody i funkcje przeciazajace operatory dzialan matematycznych.
+ *
+ * W - zawiera jeden z argeumentow operacji artmentycznej w 
+ *                     postaci wektora;
+ * M - zawiera jeden z argeumentow operacji artmentycznej w 
+ *                     postaci macierzy;
+ * liczba - zawiera jeden z argumentow operacji artmetycznej w 
+ *                     postaci liczby skalarnej;
+ *
+ * Warunek wstepny:
+ *   brak;
+ *
+ * Warunek koncowy:
+ *   brak;
+ *
+ * Zwracane wartosci:
+ *   Wynik operacji artmentycznej;
+ */
+MacierzKw MacierzKw::operator + (const MacierzKw &M) const {
   MacierzKw Wynik;
   for (int i=0; i < ROZMIAR; i++)
-    Wynik [i] = tab[i] + B[i];
+    Wynik [i] = tab[i] + M[i];
   return Wynik;
 }
 
-// Operacja odejmowania macierzy
-const MacierzKw MacierzKw::operator - (const MacierzKw &B) const {
+MacierzKw MacierzKw::operator - (const MacierzKw &M) const {
   MacierzKw Wynik;
   for (int i=0; i < ROZMIAR; i++)
-    Wynik [i] = tab[i] - B[i];
+    Wynik [i] = tab[i] - M[i];
   return Wynik;
 }
 
-// Operacja mnozenia dwoch macierzy kwadratowych
-const MacierzKw MacierzKw::operator *(const MacierzKw &B) const {
+MacierzKw MacierzKw::operator *(const MacierzKw &M) const {
   MacierzKw Wynik;
-  MacierzKw Trans_B = B.transponuj();
+  MacierzKw Trans_M = M.transponuj();
   for (int i=0; i < ROZMIAR; i++)
     for (int j=0; j < ROZMIAR; j++)
-      Wynik[i][j] = tab[i] * Trans_B[j];
+      Wynik[i][j] = tab[i] * Trans_M[j];
   return Wynik;
 }
 
-// Operacja mnozenia macierzy przzez skalar
-const MacierzKw MacierzKw::operator *(double B) const {
+MacierzKw MacierzKw::operator *(double liczba) const {
   MacierzKw Wynik;
   for (int i=0; i < ROZMIAR; i++)
-    Wynik[i] = tab[i] * B;
+    Wynik[i] = tab[i] * liczba;
   return Wynik;
 }
 
-// Operacja mnozenia macierzy przez wektor
-const Wektor MacierzKw::operator *(const Wektor &B) const {
+Wektor MacierzKw::operator *(const Wektor &W) const {
   Wektor Wynik;
   for (int i=0; i < ROZMIAR; i++)
-    Wynik[i] = tab[i] * B;
+    Wynik[i] = tab[i] * W;
   return Wynik;
 }
 
-// Operacja mnozenia skalar razy wektor
-const MacierzKw operator *(double B, const MacierzKw &M) {
+MacierzKw operator *(double liczba, const MacierzKw &M) {
   MacierzKw Wynik;
   for (int i=0; i < ROZMIAR; i++)
-    Wynik[i] = M[i] * B;
+    Wynik[i] = M[i] * liczba;
   return Wynik;
 }
 
 /********** OPERACJE POROWNANIA  **********/
-// operacja porownania macierzy
-bool MacierzKw::operator == (const MacierzKw &W2) const {
+/* Metody pozwalajace na porownywanie dwoch macierzy.
+ *
+ * M - jeden z argumentow operacji porownania
+ *
+ * Warunek wstepny:
+ *   Zgodne typy argumentow;   
+ *
+ * Warunek koncowy:
+ *   brak;
+ *
+ * Zwracane wartosci:
+ *   False lub true, wynik operacji porownania;
+ */
+bool MacierzKw::operator == (const MacierzKw &M) const {
+  double epsilon = 0.000001;
   for (int i=0; i < ROZMIAR; i++)
-    if(tab[i] != W2[i])
-      return false;
+    for (int j=0; j < ROZMIAR; j++)
+      if(abs(tab[i][j] - M[i][j]) > epsilon)
+	return false;
   return true;
 }
 
-bool MacierzKw::operator != (const MacierzKw &W2) const {
-  if( *this == W2)
+bool MacierzKw::operator != (const MacierzKw &M) const {
+  if( *this == M)
     return false;
   return true;
 }
@@ -134,7 +196,7 @@ void MacierzKw::przestaw_wiersze(int index1, int index2) {
 // Zamiana miejscami dwoch wybranych kolumn macierzy
 void MacierzKw::przestaw_kolumny(int index1, int index2) {
   MacierzKw pomocnicza;
-  pomocnicza = this->transponuj();
+  pomocnicza = (*this).transponuj();
   pomocnicza.przestaw_wiersze(index1,index2);
   *this = pomocnicza.transponuj();
 }
@@ -155,39 +217,111 @@ double MacierzKw::wyznacznik(Wyz_Metoda metoda) const {
   switch(metoda){
   case Gauss: {
     int k;
-    int zmian = 1;
+    double epsilon = 0.000000001;
+    int zmian_miejsc = 1;
     wyznacznik = 1;
     for(int i=0; i < ROZMIAR; i ++){
       k = i+1;
-      while(P[i][i] == 0){
-	if(k >= ROZMIAR)
-	  return 0;
+      while(abs(P[i][i]) < epsilon){  // Uzyskiwanie wartosci roznej od 0
+	if(k >= ROZMIAR)         // na przekatnej macierzy kwadratowej
+	  return 0; 
 	P.przestaw_wiersze(i,k++);
-	zmian *= -1;
+	zmian_miejsc *= -1;
       }
-      wyznacznik = wyznacznik * P[i][i];
-      P[i] = P[i] / P[i][i];
-      for(int j=i+1; j < ROZMIAR; j++){
-	P[j] = P[j] - (P[i] * P[j][i]);
+      wyznacznik = wyznacznik * P[i][i];    
+      P[i] = P[i] / P[i][i];                
+      for(int j=i+1; j < ROZMIAR; j++){    // Zerowanie elementow
+	P[j] = P[j] - (P[i] * P[j][i]);    // pod przekatna
       }   
     }
-    wyznacznik *= zmian;
+    wyznacznik *= zmian_miejsc;
     return wyznacznik;
   }
   case Sarrus: {
     wyznacznik = 0;
-    wyznacznik = P[0][0]*P[1][1]*P[2][2]+P[0][1]*P[1][2]*P[2][0]+\
-      P[0][2]*P[1][0]*P[2][1]-P[2][0]*P[1][1]*P[0][2]-\
-      P[2][1]*P[1][2]*P[0][0]-P[2][2]*P[1][0]*P[0][1];
+    wyznacznik = P[0][0]*P[1][1]*P[2][2] + P[0][1]*P[1][2]*P[2][0]\
+               + P[0][2]*P[1][0]*P[2][1] - P[2][0]*P[1][1]*P[0][2]\
+               - P[2][1]*P[1][2]*P[0][0] - P[2][2]*P[1][0]*P[0][1];
+    return wyznacznik;
+  }
+  case Laplace: {   // prowizorka dla 3x3
+    double wyznacznik = 0;
+    wyznacznik += tab[0][0] * (*this).wyznacznik2_2(0,0);
+    wyznacznik -= tab[0][1] * (*this).wyznacznik2_2(0,1);
+    wyznacznik += tab[0][2] * (*this).wyznacznik2_2(0,2);
     return wyznacznik;
   }
   }
-  return 4;
-  
-  
-  
+  return 0;
 }
- 
+
+double MacierzKw::wyznacznik2_2(int index1, int index2) const{ // prowizorka dla 3x3
+  double wyznacznik;
+  if (index1 < 0 || index1 >= ROZMIAR) {
+    cerr << "Poza zakresem" << endl;
+    exit(1);
+  }
+  if (index2 < 0 || index2 >= ROZMIAR) {
+    cerr << "Poza zakresem" << endl;
+    exit(1);
+  }
+  
+  switch(index1) {
+  case 0: {
+    switch(index2) {
+    case 0: {
+      wyznacznik = tab[1][1] * tab[2][2] - tab[2][1] * tab[1][2];
+      return wyznacznik;
+    }
+    case 1: {
+      wyznacznik = tab[1][0] * tab[2][2] - tab[2][0] * tab[1][2];
+      return wyznacznik;
+    }
+    case 2: {
+      wyznacznik = tab[1][0] * tab[2][1] - tab[2][0] * tab[1][1];
+      return wyznacznik;
+    }
+    }
+  }
+
+  case 1:{
+    switch(index2) {
+    case 0: {
+      wyznacznik = tab[0][1] * tab[2][2] - tab[2][1] * tab[0][2];
+      return wyznacznik;
+    }
+    case 1: {
+      wyznacznik = tab[0][0] * tab[2][2] - tab[2][0] * tab[0][2];
+      return wyznacznik;
+    }
+    case 2: {
+      wyznacznik = tab[0][0] * tab[2][1] - tab[2][0] * tab[0][1];
+      return wyznacznik;
+    }
+    }
+  }
+
+  case 2: {
+    switch(index2) {
+    case 0: {
+      wyznacznik = tab[0][1] * tab[1][2] - tab[1][1] * tab[0][2];
+      return wyznacznik;
+    }
+    case 1: {
+      wyznacznik = tab[0][0] * tab[1][2] - tab[1][0] * tab[0][2];
+      return wyznacznik;
+    }
+    case 2: {
+      wyznacznik = tab[0][0] * tab[1][1] - tab[1][0] * tab[0][1];
+      return wyznacznik;
+    }
+    }
+  }
+  }
+  return 0;
+}
+
+
 // Funkcja pozwalajaca na utworzenie macierzy jednostkowej
 MacierzKw MacierzJednostkowa() {
   MacierzKw M;
@@ -196,4 +330,41 @@ MacierzKw MacierzJednostkowa() {
       if (i == j)
    	M[i][j] = 1;
   return M;
+}
+
+MacierzKw MacierzKw::macierz_dopelnien () const{  // prowizorka dla 3x3
+  MacierzKw Dopelnien;
+  double znak = 1;
+  for (int i=0; i < ROZMIAR; i++)
+    for (int j=0; j < ROZMIAR; j++) {
+      Dopelnien[i][j] = (*this).wyznacznik2_2(i,j) * znak;
+      znak *= -1;
+    }
+  return Dopelnien;
+}
+
+
+const MacierzKw MacierzKw::odwroc() const {
+  double epsilon = 0.000000001;
+  double wyznacznik;
+  MacierzKw Odwrotna;
+  MacierzKw Dopelnien;
+  
+  wyznacznik = (*this).wyznacznik(Sarrus);
+  if (abs(wyznacznik) < epsilon){
+    cerr << "Macierz osobliwa, nieodwracalna" << endl;
+    exit(1);
+  }
+  
+  Dopelnien = (*this).macierz_dopelnien();
+  Dopelnien = Dopelnien.transponuj();
+
+  Odwrotna = (1/wyznacznik) * Dopelnien;
+
+  return Odwrotna;
+  
+  
+  
+  
+  
 }
