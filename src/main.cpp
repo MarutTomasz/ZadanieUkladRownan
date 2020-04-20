@@ -4,20 +4,22 @@
 #include "rozmiar.h"
 
 int main() {
-  double wyznacznik = 0;
-  Wektor W1(-1,1,3);
-  Wektor W2(-2,-3,1);
-  Wektor W3(1,6,2);
+  Wektor W;
+  MacierzKw M;
+  
+  cin >> M >> W;
+  UkladRownanL U(M,W);
 
-  MacierzKw A(W1, W2, W3);
-  wyznacznik = A.wyznacznik(Laplace);
-  cout << wyznacznik << endl;
 
-  MacierzKw B = A.odwroc();
-  cout << A << endl << endl;
-  cout << B << endl << endl;
-
-  MacierzKw C = A * B;
-  cout << C << endl;
+  cout << "Uklad rownan do rozwiazania:" << endl;
+  cout << U << endl;
+  
+  cout << "Rozwiazanie x = (x1, x2, x3):" << endl;
+  Wektor X = U.rozwiaz();
+  cout << X << endl << endl;
+  
+  Wektor err = M * X - W;
+  cout << "Wektor bledu:  Ax-b = (  " << err << ")" << endl;
+  cout << "Dlugosc wektora bledu: |Ax-b| = " << err.dlugosc() << endl;
 
 }

@@ -62,6 +62,7 @@ MacierzKw::MacierzKw(Wektor A, Wektor B, Wektor C) {
 std::istream & operator >> (std::istream &strm, MacierzKw &M) {
   for (int i=0; i < ROZMIAR; i++)
     cin >> M[i];
+  M.transponuj();
   return strm;
 }
 
@@ -120,10 +121,11 @@ MacierzKw MacierzKw::operator - (const MacierzKw &M) const {
 
 MacierzKw MacierzKw::operator *(const MacierzKw &M) const {
   MacierzKw Wynik;
-  MacierzKw Trans_M = M.transponuj();
+  MacierzKw KopiaM = M;
+  KopiaM.transponuj();
   for (int i=0; i < ROZMIAR; i++)
     for (int j=0; j < ROZMIAR; j++)
-      Wynik[i][j] = tab[i] * Trans_M[j];
+      Wynik[i][j] = tab[i] * KopiaM[j];
   return Wynik;
 }
 
@@ -195,20 +197,20 @@ void MacierzKw::przestaw_wiersze(int index1, int index2) {
 
 // Zamiana miejscami dwoch wybranych kolumn macierzy
 void MacierzKw::przestaw_kolumny(int index1, int index2) {
-  MacierzKw pomocnicza;
-  pomocnicza = (*this).transponuj();
-  pomocnicza.przestaw_wiersze(index1,index2);
-  *this = pomocnicza.transponuj();
+  (*this).transponuj();
+  (*this).przestaw_wiersze(index1,index2);
+  (*this).transponuj();
 }
 
 // Metoda pozwalajaca na transponowanie macierzy
-const MacierzKw MacierzKw::transponuj() const {
-  MacierzKw Transponowana;
+
+void MacierzKw::transponuj() {
+  MacierzKw Kopia = (*this);
   for (int i=0; i < ROZMIAR; i++)
     for (int j=0; j < ROZMIAR; j++)
-      Transponowana[j][i] = tab[i][j];
-  return Transponowana;
-}
+      tab[j][i] = Kopia[i][j];
+ }
+
 
 // Metoda pozwalajaca na oblicznie wyznacznikow roznymi metodami
 double MacierzKw::wyznacznik(Wyz_Metoda metoda) const {
@@ -344,27 +346,81 @@ MacierzKw MacierzKw::macierz_dopelnien () const{  // prowizorka dla 3x3
 }
 
 
-const MacierzKw MacierzKw::odwroc() const {
-  double epsilon = 0.000000001;
-  double wyznacznik;
-  MacierzKw Odwrotna;
-  MacierzKw Dopelnien;
-  
-  wyznacznik = (*this).wyznacznik(Sarrus);
-  if (abs(wyznacznik) < epsilon){
-    cerr << "Macierz osobliwa, nieodwracalna" << endl;
+MacierzKw MacierzKw::odwroc(Odw_Metoda metoda) const {
+  switch (metoda) {
+  case Definicja: {
+    double epsilon = 0.000000001;
+    double wyznacznik;
+    MacierzKw Odwrotna;
+    MacierzKw Dopelnien;
+    
+    wyznacznik = (*this).wyznacznik(Sarrus);
+    if (abs(wyznacznik) < epsilon){
+      cerr << "Macierz osobliwa, nieodwracalna" << endl;
+      exit(1);
+    }
+    
+    Dopelnien = (*this).macierz_dopelnien();
+    Dopelnien.transponuj();
+    
+    Odwrotna = (1/wyznacznik) * Dopelnien;
+    
+    return Odwrotna;
+  }
+
+  case Gauss_Jordan: {
+    MacierzKw Odwrotna = MacierzJednostkowa();
+    MacierzKw P = *this;
+    int k;
+    double epsilon = 0.000000001;
+    for(int i=0; i < ROZMIAR; i ++){
+      k = i+1;
+      while(abs(P[i][i]) < epsilon){  // Uzyskiwanie wartosci roznej od 0
+	if(k >= ROZMIAR){         // na przekatnej macierzy kwadratowej
+	  cout << "Macierz jest nieodwracalna, bo jest osobliwa" << endl;
+	  exit(1);
+	}
+	P.przestaw_wiersze(i,k);
+	Odwrotna.przestaw_wiersze(i,k);
+	k++;
+      }
+      Odwrotna[i] = Odwrotna[i] / P[i][i];
+      P[i] = P[i] / P[i][i];
+      
+      for(int j=i+1; j < ROZMIAR; j++){  
+	Odwrotna[j] = Odwrotna[j] - (Odwrotna[i] * P[j][i]);
+	P[j] = P[j] - (P[i] * P[j][i]);
+      }   
+    }
+    
+    for(int i = ROZMIAR-1; i > 0; i--) {
+      for(int j=0; j < i; j++){  
+	Odwrotna[j] = Odwrotna[j] - (Odwrotna[i] * P[j][i]);
+	P[j] = P[j] - (P[i] * P[j][i]);
+      }   
+    }
+    
+    return Odwrotna;
+  } 
+  }
+  return (*this);
+}
+
+
+void MacierzKw::zmien_wiersz(int index, const Wektor W) {
+  if (index < 0 || index >= ROZMIAR) {
+    cerr << "Poza zakresem" << endl;
+    exit(1);
+  }   
+    tab[index] = W;
+}
+
+void MacierzKw::zmien_kolumne(int index, const Wektor W) {
+  if (index < 0 || index >= ROZMIAR) {
+    cerr << "Poza zakresem" << endl;
     exit(1);
   }
-  
-  Dopelnien = (*this).macierz_dopelnien();
-  Dopelnien = Dopelnien.transponuj();
-
-  Odwrotna = (1/wyznacznik) * Dopelnien;
-
-  return Odwrotna;
-  
-  
-  
-  
-  
+  (*this).transponuj();
+  tab[index] = W;
+  (*this).transponuj();
 }

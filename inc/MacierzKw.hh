@@ -5,7 +5,7 @@
 #include "Wektor.hh"
 
 enum Wyz_Metoda {Sarrus, Laplace, Gauss};
-enum Odw_Metoda {Gaus_Jordan, Definicja};
+enum Odw_Metoda {Gauss_Jordan, Definicja};
 
 // IMPLEMENTACJA WEKTOROW JAKO WIERSZY MACIERZY !!
 
@@ -25,10 +25,10 @@ public:
   MacierzKw(Wektor A, Wektor B, Wektor C);
   
   // Operacje matematyczne
-  MacierzKw operator +(const MacierzKw &M) const; //1
-  MacierzKw operator -(const MacierzKw &M) const; //1
-  MacierzKw operator *(const MacierzKw &M) const; //1
-  MacierzKw operator *(double liczba) const; //1
+  MacierzKw operator +(const MacierzKw &M) const;
+  MacierzKw operator -(const MacierzKw &M) const;
+  MacierzKw operator *(const MacierzKw &M) const; 
+  MacierzKw operator *(double liczba) const;
   Wektor operator *(const Wektor &W) const;
   
   // Operacje porownania
@@ -36,16 +36,14 @@ public:
   bool operator != (const MacierzKw &M) const;
 
   // Metody macierzowe
+  double wyznacznik(Wyz_Metoda metoda) const; //Laplace, Gauss, Sarrus
+  MacierzKw odwroc(Odw_Metoda metoda) const; //Definicja, Gauss_Jordan
   void przestaw_wiersze(int index1, int index2);
-  double wyznacznik(Wyz_Metoda metoda) const; //laplace, gauss, sarrusa
-  const MacierzKw transponuj() const;
-  const MacierzKw odwroc() const; //z definicji, gauss
-  //void zmien_wiersz(int index, const Wektor W);
-  //void zmien_kolumne(int index, const Wektor W);
-  //Wektor zwroc_wiersz(int index);
-  //Wektor zwroc_kolumne(int index);
-  
+  void transponuj();
+  void zmien_wiersz(int index, const Wektor W);
+  void zmien_kolumne(int index, const Wektor W);  
 };
+
 // Wyswietlanie i wczytywanie
 std::istream & operator >> (std::istream &strm, MacierzKw &M);
 std::ostream & operator << (std::ostream &strm, const MacierzKw &M);
@@ -54,6 +52,6 @@ std::ostream & operator << (std::ostream &strm, const MacierzKw &M);
 MacierzKw operator *(double liczba, const MacierzKw &M);
 
 // Funkjca macierzowa
-MacierzKw MacierzJednostkowa();
+MacierzKw MacierzJednostkowa(); 
 
 #endif
