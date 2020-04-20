@@ -5,6 +5,7 @@ using std::setprecision;
 using std::fixed;
 using std::defaultfloat;
 
+/********** KONSTRUKTORY **********/
 UkladRownanL::UkladRownanL() {
   MacierzKw M;
   Wektor W;
@@ -17,6 +18,7 @@ UkladRownanL::UkladRownanL(const MacierzKw & M, const Wektor & W) {
   (*this).set_b(W);
 }
 
+/********** SET I GET  **********/
 void UkladRownanL::set_A(const MacierzKw &M) {
   (*this).A = M;
 }
@@ -34,6 +36,7 @@ const Wektor & UkladRownanL::get_b() const{
   return (*this).b;
 }
 
+/********** WCZYTYWANIE I WYSWIETLANIE **********/
 std::istream & operator >> (std::istream &strm, UkladRownanL &U){
   MacierzKw M;
   Wektor W;
@@ -56,6 +59,20 @@ std::ostream & operator << (std::ostream &strm, const UkladRownanL &U){
   return strm;
 }
 
+/********** SPECJALNA METODA **********/
+/* Metoda rozwiazujaca zadany uklad rownan liniowych z 
+ * wykorzystaniem metody Cramera
+ *
+ * Warunek wstepny:
+ *   macierz jest nieosobliwa;
+ *
+ * Warunek koncowy:
+ *   brak;
+ *
+ * Zwracane wartosci:
+ *   Wektor rozwiazania ukladu rownan;
+ */
+
 Wektor UkladRownanL::rozwiaz() const{
   double epsilon = 0.000000001;
   double wyznacznik_A = (*this).A.wyznacznik(Laplace);
@@ -64,7 +81,6 @@ Wektor UkladRownanL::rozwiaz() const{
     cerr << "Macierz osobliwa, nie da sie rozwiazac metoda Cramera" << endl;
     exit(1);
   }
-  
   
   MacierzKw Kopia = (*this).A;
   Kopia.zmien_kolumne(0,(*this).b);

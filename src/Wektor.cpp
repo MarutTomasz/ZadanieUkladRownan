@@ -49,40 +49,12 @@ Wektor::Wektor (double *tablica) {
 }
 
 /********** WCZYTYWANIE I WYSWIETLANIE  **********/
-/* Funkcja pozwalajaca na wczytywanie wartosci ze strumienia do wektora.
- *
- * strm - strumien z ktorego czytamy dane
- * W - wektor na ktory zapisujemy dane
- *
- * Warunek wstepny:
- *   strm - zainicjowany strumien wejsciowy;
- *
- * Warunek koncowy:
- *   Strumien strm nie zostal zepsuty;
- *
- * Zwracane wartosci:
- *   Wskaznik na strumien strm;
- */
 std::istream & operator >> (std::istream &strm, Wektor &W) {
   for (int i=0; i<ROZMIAR; i++)
     cin >> W[i];
   return strm;
 }
 
-/* Funkcja pozwalajaca na wypisywanie wartosci wektora na strumien.
- *
- * strm - strumien na ktory wrzucamy dane
- * W - wektor z ktorego czytamy dane
- *
- * Warunek wstepny:
- *   strm - zainicjowany strumien wyjsciowy;
- *
- * Warunek koncowy:
- *   Nastapilo wyswietlenie komunikatu;
- *
- * Zwracane wartosci:
- *   Wskaznik na strumien strm;
- */
 std::ostream & operator << (std::ostream &strm, const Wektor &W) {
   for (int i=0; i<ROZMIAR; i++)
     cout << W[i] << "  ";
@@ -90,23 +62,6 @@ std::ostream & operator << (std::ostream &strm, const Wektor &W) {
 }
 
 /********** OPERACJE MATEMATYCZNE  **********/
-/* Metody i funkcje przeciazajace operatory dzialan matematycznych.
- *
- * W - zawiera jeden z argeumentow operacji artmentycznej w 
- *                     postaci wektora;
- * liczba - zawiera jeden z argumentow operacji artmetycznej w 
- *                     postaci liczby skalarnej;
- *
- * Warunek wstepny:
- *   W przypadku operacji dzielenia, zmienna liczba musi byc 
- *                     rozna od 0;   
- *
- * Warunek koncowy:
- *   brak;
- *
- * Zwracane wartosci:
- *   Wynik operacji artmentycznej;
- */
 Wektor Wektor::operator + (const Wektor &W) const {
   Wektor wynik;
   for (int i=0; i<ROZMIAR; i++)
@@ -152,19 +107,6 @@ Wektor operator * (double liczba, const Wektor &W) {
 } 
 
 /********** OPERACJE POROWNIANIA  **********/
-/* Metody pozwalajace na porownywanie dwoch wektorow.
- *
- * W - jeden z argumentow operacji porownania
- *
- * Warunek wstepny:
- *   Zgodne typy argumentow;   
- *
- * Warunek koncowy:
- *   brak;
- *
- * Zwracane wartosci:
- *   False lub true, wynik operacji porownania;
- */
 bool Wektor::operator == (const Wektor &W) const {
   double epsilon = 0.000001;
   for (int i=0; i<ROZMIAR; i++)
@@ -180,17 +122,6 @@ bool Wektor::operator != (const Wektor &W) const {
 }
 
 /********** OPERACJE WEKTOROWE  **********/
-/* Metoda zwracajaca dlugosc wektora.
- *
- * Warunek wstepny:
- *   brak;
- *
- * Warunek koncowy:
- *   brak;
- *
- * Zwracane wartosci:
- *   Wartosc oznaczajaca dlugosc wektora;
- */
 double Wektor::dlugosc() const{
   double length = 0;
   for (int i=0; i<ROZMIAR; i++)

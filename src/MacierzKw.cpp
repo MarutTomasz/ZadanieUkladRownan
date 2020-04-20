@@ -1,20 +1,6 @@
 #include "MacierzKw.hh"
 
 /********** SET I GET  **********/
-/* Metody pozwalajace na odwolywanie sie do elementow macierzy
- * poprzez uzycie nawiasow klamrowych.
- *
- * index - pozycja elementu w tablicy;
- *
- * Warunek wstepny:
- *   index - liczba calkowita z przedzialu [0,ROZMIAR);
- *
- * Warunek koncowy:
- *   brak;
- *
- * Zwracane wartosci:
- *   Wartosc elementu tab[index];
- */
 Wektor & MacierzKw::operator[] (int index) {
   if (index < 0 || index >= ROZMIAR) {
     cerr << "Poza zakresem" << endl;
@@ -45,20 +31,6 @@ MacierzKw::MacierzKw(Wektor A, Wektor B, Wektor C) {
 }
 
 /********** WCZYTYWANIE I WYSWIETLANIE **********/
-/* Funkcja pozwalajaca na wczytywanie wartosci ze strumienia do macierzy.
- *
- * strm - strumien z ktorego czytamy dane
- * M - macierz na ktora zapisujemy dane
- *
- * Warunek wstepny:
- *   strm - zainicjowany strumien wejsciowy;
- *
- * Warunek koncowy:
- *   Strumien strm nie zostal zepsuty;
- *
- * Zwracane wartosci:
- *   Wskaznik na strumien strm;
- */
 std::istream & operator >> (std::istream &strm, MacierzKw &M) {
   for (int i=0; i < ROZMIAR; i++)
     cin >> M[i];
@@ -66,20 +38,6 @@ std::istream & operator >> (std::istream &strm, MacierzKw &M) {
   return strm;
 }
 
-/* Funkcja pozwalajaca na wypisywanie wartosci macierzy na strumien.
- *
- * strm - strumien na ktory wrzucamy dane
- * M - macierz z ktorej czytamy dane
- *
- * Warunek wstepny:
- *   strm - zainicjowany strumien wyjsciowy;
- *
- * Warunek koncowy:
- *   Nastapilo wyswietlenie komunikatu;
- *
- * Zwracane wartosci:
- *   Wskaznik na strumien strm;
- */
 std::ostream & operator << (std::ostream &strm, const MacierzKw &M) {
   for (int i=0; i < ROZMIAR; i++)
     cout << M[i] << endl;
@@ -87,24 +45,6 @@ std::ostream & operator << (std::ostream &strm, const MacierzKw &M) {
 }
 
 /********** OPERACJE MATEMATYCZNE **********/
-/* Metody i funkcje przeciazajace operatory dzialan matematycznych.
- *
- * W - zawiera jeden z argeumentow operacji artmentycznej w 
- *                     postaci wektora;
- * M - zawiera jeden z argeumentow operacji artmentycznej w 
- *                     postaci macierzy;
- * liczba - zawiera jeden z argumentow operacji artmetycznej w 
- *                     postaci liczby skalarnej;
- *
- * Warunek wstepny:
- *   brak;
- *
- * Warunek koncowy:
- *   brak;
- *
- * Zwracane wartosci:
- *   Wynik operacji artmentycznej;
- */
 MacierzKw MacierzKw::operator + (const MacierzKw &M) const {
   MacierzKw Wynik;
   for (int i=0; i < ROZMIAR; i++)
@@ -151,19 +91,6 @@ MacierzKw operator *(double liczba, const MacierzKw &M) {
 }
 
 /********** OPERACJE POROWNANIA  **********/
-/* Metody pozwalajace na porownywanie dwoch macierzy.
- *
- * M - jeden z argumentow operacji porownania
- *
- * Warunek wstepny:
- *   Zgodne typy argumentow;   
- *
- * Warunek koncowy:
- *   brak;
- *
- * Zwracane wartosci:
- *   False lub true, wynik operacji porownania;
- */
 bool MacierzKw::operator == (const MacierzKw &M) const {
   double epsilon = 0.000001;
   for (int i=0; i < ROZMIAR; i++)
@@ -203,14 +130,12 @@ void MacierzKw::przestaw_kolumny(int index1, int index2) {
 }
 
 // Metoda pozwalajaca na transponowanie macierzy
-
 void MacierzKw::transponuj() {
   MacierzKw Kopia = (*this);
   for (int i=0; i < ROZMIAR; i++)
     for (int j=0; j < ROZMIAR; j++)
       tab[j][i] = Kopia[i][j];
  }
-
 
 // Metoda pozwalajaca na oblicznie wyznacznikow roznymi metodami
 double MacierzKw::wyznacznik(Wyz_Metoda metoda) const {
@@ -323,7 +248,6 @@ double MacierzKw::wyznacznik2_2(int index1, int index2) const{ // prowizorka dla
   return 0;
 }
 
-
 // Funkcja pozwalajaca na utworzenie macierzy jednostkowej
 MacierzKw MacierzJednostkowa() {
   MacierzKw M;
@@ -348,7 +272,7 @@ MacierzKw MacierzKw::macierz_dopelnien () const{  // prowizorka dla 3x3
 
 MacierzKw MacierzKw::odwroc(Odw_Metoda metoda) const {
   switch (metoda) {
-  case Definicja: {
+  case Definicja: {   // wykorzystuje prowizorke dla 3x3
     double epsilon = 0.000000001;
     double wyznacznik;
     MacierzKw Odwrotna;
@@ -405,7 +329,6 @@ MacierzKw MacierzKw::odwroc(Odw_Metoda metoda) const {
   }
   return (*this);
 }
-
 
 void MacierzKw::zmien_wiersz(int index, const Wektor W) {
   if (index < 0 || index >= ROZMIAR) {

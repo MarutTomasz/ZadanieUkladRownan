@@ -24,6 +24,7 @@ public:
   
 };
 
+// Wyswietlanie i wczytywanie
 std::istream & operator >> (std::istream &strm, UkladRownanL &U);
 std::ostream & operator << (std::ostream &strm, const UkladRownanL &U);
 
